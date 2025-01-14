@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  canvas {
+    border: 1px solid #ddd;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+  }
+  
+  .overlay-controls {
+    margin: 20px 0;
+  }
+  
+  label {
+    margin-right: 10px;
+  }
+  
+  input[type="file"], select, input[type="range"] {
+    margin: 10px 0;
+    display: block;
+  }

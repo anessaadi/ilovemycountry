@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support São Tomé and Príncipe</title>
+    <link rel="stylesheet" href="styledone.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- remix-icons-link -->
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+    />
+    <!-- google-fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italianno&display=swap" rel="stylesheet">
+   
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo"><img src="ilmc.png" alt="logo"></a>
+        <ul class="navlist">
+            <!-- <li><a href="index.html">Home</a></li> -->
+            <!-- <li><a href="blogs.html">Blog</a></li> -->
+            <li><a href="https://www.linkedin.com/in/mohammed-anes-sa%C3%A2di-364918196/" aria-label="Linkedin">
+                Contact</a></li>
+            <!-- <li><a href="about.html">About</a></li> -->
+        </ul>
+        
+        <div class="bx bx-menu" id="menu-icon"></div>
+
+        
+    </header>
+    
+    <section class="main-section">
+    <img src="sao-tome-and-principe001.png" alt="Upload Icon" class="img-group section-static">
+    <div class="container">
+        
+        <div class="section-static1">
+            <h1 class="h1">Support São Tomé and Príncipe online!</h1>
+            <p class="p">Show your love to São Tomé and Príncipe by changing your profile picture</p>
+            <div class="upload-buttons">
+                <button class="upload-button upload-button2" id="uploadBtn">
+                    <i class='bx bxs-image-alt'></i> Upload a picture
+                </button>
+                <!-- <button class="use-button">
+                    Use <i class='bx bxl-instagram'></i> picture
+                </button> -->
+                <button class="use-button">
+                    Use <i class='bx bxl-github'></i> picture
+                </button>
+                <!-- Popup Modal -->
+                <div id="popup" class="popup-modal">
+                    <div class="popup-content">
+                        <span class="close-btn" onclick="closePopup()">&times;</span>
+                        <h4>Enter GitHub Username</h4>
+                        <input type="text" id="github-username" placeholder="Enter GitHub Username">
+                        <button onclick="fetchGitHubPicture()">Submit</button>
+                       
+                        <!-- This button will be shown after the image loads -->
+                        <button id="continue-cropping" style="display: none;" onclick="startCropping()">Continue Cropping</button>
+                    </div>
+                </div>
+                
+                
+                <!-- <button class="use-button"> 
+                    Use <i class='bx bxl-facebook-square'></i> picture
+                </button>
+                <button class="use-button">
+                    Use <i class='bx bxl-linkedin'></i> picture
+                </button> -->
+            </div>
+            <p class="privacy-notice"><i class='bx bxs-check-shield'></i>&nbsp;We do not store or save any of your photos</p>
+        </div>
+        
+        <div class="section-edit" style="display: none;">
+            <h1>Zoom in, zoom out, align</h1>
+            <div id="editor">
+                <img id="picture" alt="Your Picture">
+                <div id="frame"></div>
+            </div>
+            <div class="upload-buttons">
+                <button class="upload-button upload-button2"  id="cropBtn">
+                    Add frame
+                </button>
+                
+                <a href="sao-tome-and-principe.html">
+                    <button class="use-button" href='sao-tome-and-principe.html'>
+                    Start again
+                </button></a>
+
+            </div>
+            
+        </div>
+        <h2>How it works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="circle">1</div>
+                
+                <h3>Upload Your Image</h3>
+                <p>Begin by uploading the photo you want to use by clicking the upload button located at the top of the page.</p>
+            </div>
+            <div class="step">
+                <div class="circle">2</div>
+                <h3>Adjust and Crop</h3>
+                <p>Use the editing tool to fit your image perfectly within the São Tomé and Príncipe frame. Easily crop and position the photo so it matches your desired look and message.</p>
+            </div>
+            <div class="step">
+                <div class="circle">3</div>
+                <h3>Save Your Profile Pic</h3>
+                <p>Once you're happy with your design, press and hold on the image to download it. Now you're ready to share your personalized profile picture to show support for São Tomé and Príncipe.</p>
+            </div>
+        </div>
+        <!-- <h2>Merch</h2> -->
+        <!-- <div class="product-grid"> -->
+            <!-- Product Item -->
+            <!-- <div class="product-item">
+                <img src="image 7.png" alt="São Tomé and Príncipe T-Shirt">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Phone Case">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Coffee Mug">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="São Tomé and Príncipe T-Shirt Peace">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Stand Up for São Tomé and Príncipe Shirt">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Anti-genocide T-Shirt">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Map of São Tomé and Príncipe T-Shirt">
+                <p>Legends are born in São Tomé and Príncipe ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+        </div> -->
+        <div class="keywords">
+            <h2>Keywords</h2>
+            <div class="tags">
+                <a>São Tomé and Príncipe flag frame</a>
+                <a>Profile picture with São Tomé and Príncipe flag</a>
+                <a>Add São Tomé and Príncipe flag to photo</a>
+                <a>São Tomé and Príncipe photo frame online</a>
+                <a>Show support for São Tomé and Príncipe</a>
+                <a>São Tomé and Príncipe profile picture generator</a>
+                <a>São Tomé and Príncipe flag overlay</a>
+                <a>São Tomé and Príncipe pride photo editor</a>
+                <a>São Tomé and Príncipe flag on profile</a>
+                <a>Online photo editor São Tomé and Príncipe flag</a>
+                <a>Stand with São Tomé and Príncipe</a>
+                <a>Free São Tomé and Príncipe photo frame</a>
+                <a>Support São Tomé and Príncipe profile pic</a>
+                <a>São Tomé and Príncipe solidarity photo frame</a>
+                <a>Proud to be São Tomé and Príncipe</a>
+                <a>São Tomé and Príncipe social media profile</a>
+                <a>Custom São Tomé and Príncipe flag frame</a>
+                <a>Photo editor for São Tomé and Príncipians</a>
+                <a>Upload photo São Tomé and Príncipe flag</a>
+                <a>Upload photo add São Tomé and Príncipe frame</a>
+                <a>Easy São Tomé and Príncipe flag frame tool</a>
+                <a>Generate São Tomé and Príncipe flag photo</a>
+                <a>São Tomé and Príncipe flag picture editor</a>
+
+            </div>
+        </div>
+
+    </div>
+    
+</section>
+<footer class="footer">
+    <div class="footer-content">
+        <p>© 2024 iLoveMyCountry.com</p>
+        
+        <div class="social-icons">
+            <a href="#" class="privacy-policy">Privacy Policy</a>
+            <a href="https://www.linkedin.com/in/mohammed-anes-sa%C3%A2di-364918196/" aria-label="Instagram">
+                <i class='bx bxl-linkedin-square' ></i>
+            </a>
+            
+        </div>
+    </div>
+</footer>
+<script src="script.js">
+    
+</script>
+</body>
+</html>

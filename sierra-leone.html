@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Sierra Leone</title>
+    <link rel="stylesheet" href="styledone.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- remix-icons-link -->
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+    />
+    <!-- google-fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italianno&display=swap" rel="stylesheet">
+   
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo"><img src="ilmc.png" alt="logo"></a>
+        <ul class="navlist">
+            <!-- <li><a href="index.html">Home</a></li> -->
+            <!-- <li><a href="blogs.html">Blog</a></li> -->
+            <li><a href="https://www.linkedin.com/in/mohammed-anes-sa%C3%A2di-364918196/" aria-label="Linkedin">
+                Contact</a></li>
+            <!-- <li><a href="about.html">About</a></li> -->
+        </ul>
+        
+        <div class="bx bx-menu" id="menu-icon"></div>
+
+        
+    </header>
+    
+    <section class="main-section">
+    <img src="sierra-leone001.png" alt="Upload Icon" class="img-group section-static">
+    <div class="container">
+        
+        <div class="section-static1">
+            <h1 class="h1">Support Sierra Leone online!</h1>
+            <p class="p">Show your love to Sierra Leone by changing your profile picture</p>
+            <div class="upload-buttons">
+                <button class="upload-button upload-button2" id="uploadBtn">
+                    <i class='bx bxs-image-alt'></i> Upload a picture
+                </button>
+                <!-- <button class="use-button">
+                    Use <i class='bx bxl-instagram'></i> picture
+                </button> -->
+                <button class="use-button">
+                    Use <i class='bx bxl-github'></i> picture
+                </button>
+                <!-- Popup Modal -->
+                <div id="popup" class="popup-modal">
+                    <div class="popup-content">
+                        <span class="close-btn" onclick="closePopup()">&times;</span>
+                        <h4>Enter GitHub Username</h4>
+                        <input type="text" id="github-username" placeholder="Enter GitHub Username">
+                        <button onclick="fetchGitHubPicture()">Submit</button>
+                       
+                        <!-- This button will be shown after the image loads -->
+                        <button id="continue-cropping" style="display: none;" onclick="startCropping()">Continue Cropping</button>
+                    </div>
+                </div>
+                
+                <!-- <button class="use-button"> 
+                    Use <i class='bx bxl-facebook-square'></i> picture
+                </button>
+                <button class="use-button">
+                    Use <i class='bx bxl-linkedin'></i> picture
+                </button> -->
+            </div>
+            <p class="privacy-notice"><i class='bx bxs-check-shield'></i>&nbsp;We do not store or save any of your photos</p>
+        </div>
+        
+        <div class="section-edit" style="display: none;">
+            <h1>Zoom in, zoom out, align</h1>
+            <div id="editor">
+                <img id="picture" alt="Your Picture">
+                <div id="frame"></div>
+            </div>
+            <div class="upload-buttons">
+                <button class="upload-button upload-button2"  id="cropBtn">
+                    Add frame
+                </button>
+                
+                <a href="sierra-leone.html">
+                    <button class="use-button" href='sierra-leone.html'>
+                    Start again
+                </button></a>
+
+            </div>
+            
+        </div>
+        <h2>How it works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="circle">1</div>
+                
+                <h3>Upload Your Image</h3>
+                <p>Begin by uploading the photo you want to use by clicking the upload button located at the top of the page.</p>
+            </div>
+            <div class="step">
+                <div class="circle">2</div>
+                <h3>Adjust and Crop</h3>
+                <p>Use the editing tool to fit your image perfectly within the Sierra Leone frame. Easily crop and position the photo so it matches your desired look and message.</p>
+            </div>
+            <div class="step">
+                <div class="circle">3</div>
+                <h3>Save Your Profile Pic</h3>
+                <p>Once you're happy with your design, press and hold on the image to download it. Now you're ready to share your personalized profile picture to show support for Sierra Leone.</p>
+            </div>
+        </div>
+        <!-- <h2>Merch</h2> -->
+        <!-- <div class="product-grid"> -->
+            <!-- Product Item -->
+            <!-- <div class="product-item">
+                <img src="image 7.png" alt="Sierra Leone T-Shirt">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Phone Case">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Coffee Mug">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Sierra Leone T-Shirt Peace">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Stand Up for Sierra Leone Shirt">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Anti-genocide T-Shirt">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+            <div class="product-item">
+                <img src="image 7.png" alt="Map of Sierra Leone T-Shirt">
+                <p>Legends are born in Sierra Leone ..</p>
+                <a href="#">See all products &rarr;</a>
+            </div>
+        </div> -->
+        <div class="keywords">
+            <h2>Keywords</h2>
+            <div class="tags">
+                <a>Sierra Leone flag frame</a>
+                <a>Profile picture with Sierra Leone flag</a>
+                <a>Add Sierra Leone flag to photo</a>
+                <a>Sierra Leone photo frame online</a>
+                <a>Show support for Sierra Leone</a>
+                <a>Sierra Leone profile picture generator</a>
+                <a>Sierra Leone flag overlay</a>
+                <a>Sierra Leone pride photo editor</a>
+                <a>Sierra Leone flag on profile</a>
+                <a>Online photo editor Sierra Leone flag</a>
+                <a>Stand with Sierra Leone</a>
+                <a>Free Sierra Leone photo frame</a>
+                <a>Support Sierra Leone profile pic</a>
+                <a>Sierra Leone solidarity photo frame</a>
+                <a>Proud to be Sierra Leonean</a>
+                <a>Sierra Leonean social media profile</a>
+                <a>Custom Sierra Leone flag frame</a>
+                <a>Photo editor for Sierra Leoneans</a>
+                <a>Upload photo Sierra Leone flag</a>
+                <a>Upload photo add Sierra Leone frame</a>
+                <a>Easy Sierra Leone flag frame tool</a>
+                <a>Generate Sierra Leone flag photo</a>
+                <a>Sierra Leone flag picture editor</a>
+
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="social-media">
+                    <p>Follow us on:</p>
+                    <a href="https://www.instagram.com/" target="_blank">Instagram</a> |
+                    <a href="https://www.twitter.com/" target="_blank">Twitter</a> |
+                    <a href="https://www.facebook.com/" target="_blank">Facebook</a>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Terms & Conditions</a> |
+                    <a href="#">Privacy Policy</a> |
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
