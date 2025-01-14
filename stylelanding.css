@@ -81,7 +81,7 @@ html{
 .hero h1, .hero h1 span{
     font-family: 'CustomFont', sans-serif;
 
-    font-size: 54px;
+    font-size: 50px;
     
     /* font-size: 3rem; */
     margin-bottom: 20px;
@@ -89,7 +89,7 @@ html{
 }
 
 .hero p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 30px;
     max-width: 520px;
 }
@@ -123,7 +123,7 @@ html{
 
 .img-group{
     padding-top: 40px;
-    width: 90%;
+    width: 80%;
     margin-left: 5%;
     /* display: none; */
 }
