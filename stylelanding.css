@@ -89,9 +89,9 @@ html{
 }
 
 .hero p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 30px;
-    max-width: 520px;
+    max-width:470px;
 }
 
 .country-selector {
