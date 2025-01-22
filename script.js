@@ -148,6 +148,7 @@ editor.addEventListener('touchstart', (e) => {
 
 editor.addEventListener('touchmove', (e) => {
     if (e.touches.length === 2) {
+        e.preventDefault(); // Prevent default scroll behavior while zooming
         const newTouchDistance = getDistanceBetweenTouches(e);
         if (lastTouchDistance) {
             const delta = newTouchDistance - lastTouchDistance;
@@ -158,7 +159,7 @@ editor.addEventListener('touchmove', (e) => {
         }
         lastTouchDistance = newTouchDistance;
     }
-}, { passive: true });
+}, { passive: false });  // Set passive to false to prevent default scroll behavior
 
 // Function to calculate distance between two touch points
 function getDistanceBetweenTouches(e) {
@@ -185,6 +186,32 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
     isDragging = false;
     picture.style.cursor = 'grab';
+});
+
+// Touch dragging functionality for mobile
+let startTouchX = 0;
+let startTouchY = 0;
+let isTouchDragging = false;
+
+picture.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+        isTouchDragging = true;
+        startTouchX = e.touches[0].clientX - posX;
+        startTouchY = e.touches[0].clientY - posY;
+    }
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+    if (isTouchDragging && e.touches.length === 1) {
+        e.preventDefault();  // Prevent scrolling while dragging
+        posX = e.touches[0].clientX - startTouchX;
+        posY = e.touches[0].clientY - startTouchY;
+        picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
+}, { passive: false });
+
+document.addEventListener('touchend', () => {
+    isTouchDragging = false;
 });
 
 // Function to open the popup
