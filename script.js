@@ -9,6 +9,7 @@ let posX = 0;
 let posY = 0;
 let isDragging = false;
 let startX, startY;
+let lastTouchDistance = 0;
 
 // Set initial frame image
 frame.style.backgroundImage = "url('frame0001.png')"; // Replace with your frame URL
@@ -112,10 +113,6 @@ function fetchGitHubPicture() {
     }
 }
 
-
-
-
-
 // Reset image position and scale
 function resetImagePosition() {
     scale = 1;
@@ -133,12 +130,42 @@ function toggleSections() {
 
 // Zoom functionality with mouse wheel
 editor.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const zoomSpeed = 0.1;
-    scale += e.deltaY > 0 ? -zoomSpeed : zoomSpeed;
-    scale = Math.max(0.5, Math.min(scale, 3));
-    picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    if (e.ctrlKey) {
+        e.preventDefault();
+        const zoomSpeed = 0.1;
+        scale += e.deltaY > 0 ? -zoomSpeed : zoomSpeed;
+        scale = Math.max(0.5, Math.min(scale, 3));
+        picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
 });
+
+// Touch-based zoom functionality
+editor.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+        lastTouchDistance = getDistanceBetweenTouches(e);
+    }
+}, { passive: true });
+
+editor.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 2) {
+        const newTouchDistance = getDistanceBetweenTouches(e);
+        if (lastTouchDistance) {
+            const delta = newTouchDistance - lastTouchDistance;
+            const zoomSpeed = 0.005;
+            scale += delta * zoomSpeed;
+            scale = Math.max(0.5, Math.min(scale, 3));
+            picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+        lastTouchDistance = newTouchDistance;
+    }
+}, { passive: true });
+
+// Function to calculate distance between two touch points
+function getDistanceBetweenTouches(e) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
 
 // Dragging functionality for repositioning the image
 picture.addEventListener('mousedown', (e) => {
@@ -228,5 +255,3 @@ cropBtn.addEventListener('click', () => {
         alert("Failed to load the image. Please check the source or try again.");
     };
 });
-
-
