@@ -113,32 +113,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Zoom and drag functionality
     editor.addEventListener('wheel', (e) => {
-        if (e.ctrlKey || e.target === editor || e.target === picture) {
-            e.preventDefault(); // Prevent page scroll
+        if (e.target === editor || e.target === picture) {
+            e.preventDefault();
             const zoomSpeed = 0.1;
-    
-            // Get the current bounds of the image
-            const rect = picture.getBoundingClientRect();
-    
-            // Calculate mouse position relative to the image
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-    
-            // Adjust scale
+
+            // Calculate zoom scale
             const newScale = scale + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed);
             const clampedScale = Math.max(0.5, Math.min(newScale, 3));
             const scaleRatio = clampedScale / scale;
-    
+
+            // Get image bounds and calculate relative mouse position
+            const rect = picture.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
             // Adjust position to zoom towards cursor
             posX = mouseX - (mouseX - posX) * scaleRatio;
             posY = mouseY - (mouseY - posY) * scaleRatio;
-    
+
             scale = clampedScale;
             picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-    
-            console.log(`Zoom: scale=${scale}, posX=${posX}, posY=${posY}`);
         }
-    }, { passive: false }); // Important to allow preventing default behavior
+    }, { passive: false });
+
+    // Touch events for mobile pinch-to-zoom
+    let initialDistance = 0;
+    let initialScale = 1;
+
+    editor.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            initialDistance = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+            initialScale = scale;
+        }
+    });
+
+    editor.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const newDistance = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+
+            const newScale = initialScale * (newDistance / initialDistance);
+            scale = Math.max(0.5, Math.min(newScale, 3));
+
+            picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+    }, { passive: false });
+
+    editor.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+            initialDistance = 0;
+        }
+    });
 
     picture.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -151,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 posX = moveEvent.clientX - startX;
                 posY = moveEvent.clientY - startY;
                 picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-                console.log(`Dragging: posX=${posX}, posY=${posY}`);
             }
         };
 
@@ -170,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cropBtn.addEventListener('click', () => {
         if (!picture.src || picture.src === "") {
             alert("Failed to crop the image. Please check the source or try again.");
-            console.error("No image source available for cropping");
             return;
         }
 
@@ -211,11 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const path = window.location.pathname;
             const countryName = path.substring(path.lastIndexOf('/') + 1).split('.')[0];
             window.location.href = `done.html?country=${encodeURIComponent(countryName)}`;
-        };
-
-        img.onerror = () => {
-            alert("Failed to load the image. Please check the source or try again.");
-            console.error("Image loading error during cropping");
         };
     });
 });
