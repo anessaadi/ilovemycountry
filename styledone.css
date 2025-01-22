@@ -168,6 +168,9 @@ html{
     justify-content: center;
     cursor: pointer;
 }
+.use-button {
+    color: black;
+}
 .download-button {
     width: 13em;
     height: 40px;
