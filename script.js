@@ -1,284 +1,221 @@
-const uploadBtn = document.getElementById('uploadBtn');
-const picture = document.getElementById('picture');
-const frame = document.getElementById('frame');
-const editor = document.getElementById('editor');
-const cropBtn = document.getElementById('cropBtn');
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded and parsed");
 
-let scale = 1;
-let posX = 0;
-let posY = 0;
-let isDragging = false;
-let startX, startY;
-let lastTouchDistance = 0;
+    // Menu toggle functionality
+    const menu = document.querySelector('#menu-icon');
+    const navlist = document.querySelector('.navlist');
 
-// Set initial frame image
-frame.style.backgroundImage = "url('frame0001.png')"; // Replace with your frame URL
+    if (menu && navlist) {
+        menu.onclick = () => {
+            menu.classList.toggle('bx-x');
+            navlist.classList.toggle('open');
+            console.log("Menu toggled");
+        };
+    } else {
+        console.error("Menu or navlist element not found");
+    }
 
-// Upload button event
-uploadBtn.addEventListener('click', () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.style.display = 'none';
-    document.body.appendChild(input);
+    // Country selection and redirect functionality
+    const goButton = document.getElementById("go-button");
+    const countryDropdown = document.getElementById("country-dropdown");
 
-    input.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const img = new Image();
-                img.onload = () => {
-                    // Calculate scaling factor
-                    const maxDimension = 540;
-                    const scaleFactor = Math.min(
-                        maxDimension / img.width,
-                        maxDimension / img.height,
-                        1 // Ensure scaling does not upscale smaller images
-                    );
+    if (goButton && countryDropdown) {
+        goButton.addEventListener("click", () => {
+            const selectedCountry = countryDropdown.value;
+            if (selectedCountry) {
+                console.log(`Redirecting to: /${selectedCountry}.html`);
+                window.location.href = `/${selectedCountry}.html`;
+            } else {
+                alert("Please select a country first!");
+            }
+        });
+    } else {
+        console.error("Go button or country dropdown element not found");
+    }
 
-                    // Apply scaling to the image element
-                    const scaledWidth = img.width * scaleFactor;
-                    const scaledHeight = img.height * scaleFactor;
+    // Variables for image upload, editing, and cropping
+    const uploadBtn = document.getElementById('uploadBtn');
+    const picture = document.getElementById('picture');
+    const frame = document.getElementById('frame');
+    const editor = document.getElementById('editor');
+    const cropBtn = document.getElementById('cropBtn');
 
-                    picture.style.width = `${scaledWidth}px`;
-                    picture.style.height = `${scaledHeight}px`;
-                    picture.src = reader.result;
+    if (!uploadBtn || !picture || !frame || !editor || !cropBtn) {
+        console.error("One or more image-related elements not found");
+        return;
+    }
 
-                    resetImagePosition();
-                    toggleSections();
-                };
-                img.src = reader.result;
-            };
-            reader.readAsDataURL(file);
-        }
-        document.body.removeChild(input);
-    });
+    console.log("Image-related elements found");
 
-    input.click();
-});
+    let scale = 1;
+    let posX = 0;
+    let posY = 0;
+    let isDragging = false;
 
-// GitHub picture fetch and display
-function fetchGitHubPicture() {
-    const username = document.getElementById("github-username").value.trim();
+    // Set initial frame image
+    frame.style.backgroundImage = "url('frame0001.png')";
 
-    if (username) {
-        const githubApiUrl = `https://api.github.com/users/${username}`;
+    // Upload functionality
+    uploadBtn.addEventListener('click', () => {
+        console.log("Upload button clicked");
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.style.display = 'none';
+        document.body.appendChild(input);
 
-        fetch(githubApiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.avatar_url) {
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                console.log("File selected");
+                const reader = new FileReader();
+                reader.onload = () => {
                     const img = new Image();
-                    img.crossOrigin = "anonymous"; // Allow CORS if necessary
-
                     img.onload = () => {
-                        // Calculate scaling factor
                         const maxDimension = 540;
                         const scaleFactor = Math.min(
                             maxDimension / img.width,
                             maxDimension / img.height,
-                            1 // Ensure scaling does not upscale smaller images
+                            1
                         );
-
-                        // Apply scaling to the image element
-                        const scaledWidth = img.width * scaleFactor;
-                        const scaledHeight = img.height * scaleFactor;
-
-                        // Set the image source and scaling styles
-                        picture.style.width = `${scaledWidth}px`;
-                        picture.style.height = `${scaledHeight}px`;
-                        picture.src = img.src;
-
+                        picture.style.width = `${img.width * scaleFactor}px`;
+                        picture.style.height = `${img.height * scaleFactor}px`;
+                        picture.src = reader.result;
                         resetImagePosition();
                         toggleSections();
                     };
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+            document.body.removeChild(input);
+        });
 
-                    img.onerror = () => {
-                        alert("Failed to load the image. CORS issue detected.");
-                    };
+        input.click();
+    });
 
-                    // Directly set the image source to the avatar URL
-                    img.src = data.avatar_url;
-                } else {
-                    alert('GitHub user not found or no profile picture available.');
-                }
-            })
-            .catch(error => {
-                alert('An error occurred while fetching the GitHub profile picture.');
-                console.error(error);
-            });
-    } else {
-        alert("Please enter a GitHub username.");
-    }
-}
-
-// Reset image position and scale
-function resetImagePosition() {
-    scale = 1;
-    posX = 0;
-    posY = 0;
-    picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-}
-
-// Toggle between static and edit sections
-function toggleSections() {
-    document.querySelector('.section-static').style.display = 'none';
-    document.querySelector('.section-static1').style.display = 'none';
-    document.querySelector('.section-edit').style.display = 'flex';
-}
-
-// Zoom functionality with mouse wheel
-editor.addEventListener('wheel', (e) => {
-    if (e.ctrlKey) {
-        e.preventDefault();
-        const zoomSpeed = 0.1;
-        scale += e.deltaY > 0 ? -zoomSpeed : zoomSpeed;
-        scale = Math.max(0.5, Math.min(scale, 3));
+    // Reset image position and scale
+    function resetImagePosition() {
+        scale = 1;
+        posX = 0;
+        posY = 0;
         picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        console.log("Image position reset");
     }
-});
 
-// Touch-based zoom functionality
-editor.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 2) {
-        lastTouchDistance = getDistanceBetweenTouches(e);
+    // Toggle visibility of sections
+    function toggleSections() {
+        document.querySelector('.section-static').style.display = 'none';
+        document.querySelector('.section-static1').style.display = 'none';
+        document.querySelector('.section-edit').style.display = 'flex';
+        console.log("Sections toggled");
     }
-}, { passive: true });
 
-editor.addEventListener('touchmove', (e) => {
-    if (e.touches.length === 2) {
-        e.preventDefault(); // Prevent default scroll behavior while zooming
-        const newTouchDistance = getDistanceBetweenTouches(e);
-        if (lastTouchDistance) {
-            const delta = newTouchDistance - lastTouchDistance;
-            const zoomSpeed = 0.005;
-            scale += delta * zoomSpeed;
-            scale = Math.max(0.5, Math.min(scale, 3));
+    // Zoom and drag functionality
+    editor.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.target === editor || e.target === picture) {
+            e.preventDefault(); // Prevent page scroll
+            const zoomSpeed = 0.1;
+    
+            // Get the current bounds of the image
+            const rect = picture.getBoundingClientRect();
+    
+            // Calculate mouse position relative to the image
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+    
+            // Adjust scale
+            const newScale = scale + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed);
+            const clampedScale = Math.max(0.5, Math.min(newScale, 3));
+            const scaleRatio = clampedScale / scale;
+    
+            // Adjust position to zoom towards cursor
+            posX = mouseX - (mouseX - posX) * scaleRatio;
+            posY = mouseY - (mouseY - posY) * scaleRatio;
+    
+            scale = clampedScale;
             picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    
+            console.log(`Zoom: scale=${scale}, posX=${posX}, posY=${posY}`);
         }
-        lastTouchDistance = newTouchDistance;
-    }
-}, { passive: false });  // Set passive to false to prevent default scroll behavior
+    }, { passive: false }); // Important to allow preventing default behavior
 
-// Function to calculate distance between two touch points
-function getDistanceBetweenTouches(e) {
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-}
+    picture.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const startX = e.clientX - posX;
+        const startY = e.clientY - posY;
+        picture.style.cursor = 'grabbing';
 
-// Dragging functionality for repositioning the image
-picture.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.clientX - posX;
-    startY = e.clientY - posY;
-    picture.style.cursor = 'grabbing';
-});
+        const onMouseMove = (moveEvent) => {
+            if (isDragging) {
+                posX = moveEvent.clientX - startX;
+                posY = moveEvent.clientY - startY;
+                picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+                console.log(`Dragging: posX=${posX}, posY=${posY}`);
+            }
+        };
 
-document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    posX = e.clientX - startX;
-    posY = e.clientY - startY;
-    picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-});
+        const onMouseUp = () => {
+            isDragging = false;
+            picture.style.cursor = 'grab';
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
 
-document.addEventListener('mouseup', () => {
-    isDragging = false;
-    picture.style.cursor = 'grab';
-});
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
 
-// Touch dragging functionality for mobile
-let startTouchX = 0;
-let startTouchY = 0;
-let isTouchDragging = false;
+    // Crop functionality
+    cropBtn.addEventListener('click', () => {
+        if (!picture.src || picture.src === "") {
+            alert("Failed to crop the image. Please check the source or try again.");
+            console.error("No image source available for cropping");
+            return;
+        }
 
-picture.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-        isTouchDragging = true;
-        startTouchX = e.touches[0].clientX - posX;
-        startTouchY = e.touches[0].clientY - posY;
-    }
-}, { passive: true });
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = picture.src;
 
-document.addEventListener('touchmove', (e) => {
-    if (isTouchDragging && e.touches.length === 1) {
-        e.preventDefault();  // Prevent scrolling while dragging
-        posX = e.touches[0].clientX - startTouchX;
-        posY = e.touches[0].clientY - startTouchY;
-        picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-    }
-}, { passive: false });
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const editorRect = editor.getBoundingClientRect();
+            const pictureRect = picture.getBoundingClientRect();
 
-document.addEventListener('touchend', () => {
-    isTouchDragging = false;
-});
+            canvas.width = editorRect.width;
+            canvas.height = editorRect.height;
 
-// Function to open the popup
-document.querySelector('.use-button').addEventListener('click', function() {
-    document.getElementById('popup').style.display = 'flex';
-});
+            const scaleFactorX = img.naturalWidth / pictureRect.width;
+            const scaleFactorY = img.naturalHeight / pictureRect.height;
 
-// Function to close the popup
-function closePopup() {
-    document.getElementById('popup').style.display = 'none';
-}
+            const offsetX = (editorRect.left - pictureRect.left) * scaleFactorX;
+            const offsetY = (editorRect.top - pictureRect.top) * scaleFactorY;
 
-// Cropping functionality
-cropBtn.addEventListener('click', () => {
-    if (!picture.src || picture.src === "") {
-        alert("Failed to crop the image. Please check the source or try again.");
-        return;
-    }
+            ctx.drawImage(
+                img,
+                offsetX,
+                offsetY,
+                editorRect.width * scaleFactorX,
+                editorRect.height * scaleFactorY,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
 
-    const img = new Image();
-    img.crossOrigin = "anonymous"; // Set cross-origin to anonymous for external images
-    img.src = picture.src;
+            const croppedImage = canvas.toDataURL();
+            localStorage.setItem('croppedImage', croppedImage);
 
-    img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+            const path = window.location.pathname;
+            const countryName = path.substring(path.lastIndexOf('/') + 1).split('.')[0];
+            window.location.href = `done.html?country=${encodeURIComponent(countryName)}`;
+        };
 
-        const editorRect = editor.getBoundingClientRect();
-        const pictureRect = picture.getBoundingClientRect();
-
-        canvas.width = editorRect.width;
-        canvas.height = editorRect.height;
-
-        const scaleFactorX = img.naturalWidth / pictureRect.width;
-        const scaleFactorY = img.naturalHeight / pictureRect.height;
-
-        const offsetX = (editorRect.left - pictureRect.left) * scaleFactorX;
-        const offsetY = (editorRect.top - pictureRect.top) * scaleFactorY;
-
-        ctx.drawImage(
-            img,
-            offsetX,
-            offsetY,
-            editorRect.width * scaleFactorX,
-            editorRect.height * scaleFactorY,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-        const croppedImage = canvas.toDataURL();
-        localStorage.setItem('croppedImage', croppedImage);
-
-        // Extract the country name from the file name (without the extension)
-        const path = window.location.pathname;
-        const fileName = path.substring(path.lastIndexOf('/') + 1);
-        const countryName = fileName.split('.')[0]; // Get the part before the .html extension
-
-        // Remove ".html" if it exists in the countryName
-        const cleanCountryName = countryName.replace('.html', '');
-
-        // Modify the URL with the country name as a query parameter
-        window.location.href = `done.html?country=${encodeURIComponent(cleanCountryName)}`;
-    };
-
-    img.onerror = () => {
-        alert("Failed to load the image. Please check the source or try again.");
-    };
+        img.onerror = () => {
+            alert("Failed to load the image. Please check the source or try again.");
+            console.error("Image loading error during cropping");
+        };
+    });
 });

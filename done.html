@@ -161,6 +161,15 @@
     </div>
 </footer>
 <script>
+    let menu = document.querySelector('#menu-icon')
+    let navlist = document.querySelector('.navlist')
+
+    menu.onclick = () => {
+        menu.classList.toggle('bx-x');
+        navlist.classList.toggle('open');
+    };
+
+    
     const croppedImage = localStorage.getItem('croppedImage');
         const frame1 = document.getElementById('frame1');
         const frame2 = document.getElementById('frame2');

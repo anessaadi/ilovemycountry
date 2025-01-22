@@ -43,7 +43,7 @@ select {
     /* background-color: #f0f0f0;  */
     color: #333; /* Text color */
     border: 1px solid #ccc; /* Border around the select box */
-    /* padding: 10px; Padding for better visuals */
+    padding: 10px;
 }
 
 .upload-buttons i{
