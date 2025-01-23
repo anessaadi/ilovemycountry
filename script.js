@@ -111,23 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Sections toggled");
     }
 
-    // Zoom and drag functionality
+    // Zoom functionality
     editor.addEventListener('wheel', (e) => {
         if (e.target === editor || e.target === picture) {
             e.preventDefault();
             const zoomSpeed = 0.1;
 
-            // Calculate zoom scale
             const newScale = scale + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed);
             const clampedScale = Math.max(0.5, Math.min(newScale, 3));
             const scaleRatio = clampedScale / scale;
 
-            // Get image bounds and calculate relative mouse position
             const rect = picture.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
 
-            // Adjust position to zoom towards cursor
             posX = mouseX - (mouseX - posX) * scaleRatio;
             posY = mouseY - (mouseY - posY) * scaleRatio;
 
@@ -136,41 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: false });
 
-    // Touch events for mobile pinch-to-zoom
-    let initialDistance = 0;
-    let initialScale = 1;
-
-    editor.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) {
-            initialDistance = Math.hypot(
-                e.touches[0].pageX - e.touches[1].pageX,
-                e.touches[0].pageY - e.touches[1].pageY
-            );
-            initialScale = scale;
-        }
-    });
-
-    editor.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 2) {
-            e.preventDefault();
-            const newDistance = Math.hypot(
-                e.touches[0].pageX - e.touches[1].pageX,
-                e.touches[0].pageY - e.touches[1].pageY
-            );
-
-            const newScale = initialScale * (newDistance / initialDistance);
-            scale = Math.max(0.5, Math.min(newScale, 3));
-
-            picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-        }
-    }, { passive: false });
-
-    editor.addEventListener('touchend', (e) => {
-        if (e.touches.length < 2) {
-            initialDistance = 0;
-        }
-    });
-
+    // Drag functionality for desktop
     picture.addEventListener('mousedown', (e) => {
         isDragging = true;
         const startX = e.clientX - posX;
@@ -194,6 +157,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
+    });
+
+    // Touch functionality for mobile
+    let initialDistance = 0;
+    let initialScale = 1;
+    let lastTouchPosX = 0;
+    let lastTouchPosY = 0;
+
+    editor.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            initialDistance = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+            initialScale = scale;
+        } else if (e.touches.length === 1) {
+            isDragging = true;
+            lastTouchPosX = e.touches[0].pageX;
+            lastTouchPosY = e.touches[0].pageY;
+        }
+    });
+
+    editor.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const newDistance = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+
+            const newScale = initialScale * (newDistance / initialDistance);
+            scale = Math.max(0.5, Math.min(newScale, 3));
+
+            picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        } else if (e.touches.length === 1 && isDragging) {
+            e.preventDefault();
+            const touchPosX = e.touches[0].pageX;
+            const touchPosY = e.touches[0].pageY;
+
+            posX += touchPosX - lastTouchPosX;
+            posY += touchPosY - lastTouchPosY;
+
+            lastTouchPosX = touchPosX;
+            lastTouchPosY = touchPosY;
+
+            picture.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+    }, { passive: false });
+
+    editor.addEventListener('touchend', () => {
+        isDragging = false;
     });
 
     // Crop functionality
